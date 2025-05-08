@@ -12,17 +12,9 @@ spec:
       labels:
         app: spring-boot-app
     spec:
-      nodeSelector:
-        kubernetes.io/role: worker
-      securityContext:
-        runAsNonRoot: true
       containers:
         - name: spring-boot-app
           image: spring-boot-app:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
-          readinessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8080
