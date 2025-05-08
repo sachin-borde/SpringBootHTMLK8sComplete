@@ -3,9 +3,7 @@ kind: Deployment
 metadata:
   name: spring-boot-app
 spec:
-  replicas: 2
-  strategy:
-    type: RollingUpdate  # Better than default Recreate
+  replicas: 3
   selector:
     matchLabels:
       app: spring-boot-app
@@ -14,31 +12,17 @@ spec:
       labels:
         app: spring-boot-app
     spec:
+      nodeSelector:
+        kubernetes.io/role: worker
+      securityContext:
+        runAsNonRoot: true
       containers:
         - name: spring-boot-app
           image: spring-boot-app:latest
-          imagePullPolicy: Never  # Keep for local images
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
-          readinessProbe:          # Added health check
+          readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 15
-            periodSeconds: 10
-          livenessProbe:           # Added health check
-            httpGet:
-              path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 15
-          resources:
-            requests:
-              memory: "512Mi"
-              cpu: "500m"
-            limits:
-              memory: "1024Mi"
-              cpu: "1000m"
-      securityContext:             # Security improvement
-        runAsNonRoot: true
-        runAsUser: 1000
