@@ -20,7 +20,20 @@ spec:
             - containerPort: 8080
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /  # Changed from /actuator/health to root endpoint
               port: 8080
-            initialDelaySeconds: 15
-            periodSeconds: 5
+            initialDelaySeconds: 30  # Increased delay for slower startups
+            periodSeconds: 10
+          livenessProbe:  # Added liveness probe
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 15
+          resources:  # Added resource limits
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
