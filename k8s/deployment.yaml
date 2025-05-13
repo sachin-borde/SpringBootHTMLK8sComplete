@@ -15,22 +15,22 @@ spec:
       containers:
         - name: spring-app
           image: spring-boot-app:latest
-          imagePullPolicy: Never  # Use local image
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
           readinessProbe:
             httpGet:
-              path: /  # Changed from /actuator/health to root endpoint
+              path: /
               port: 8080
-            initialDelaySeconds: 30  # Increased delay for slower startups
+            initialDelaySeconds: 30
             periodSeconds: 10
-          livenessProbe:  # Added liveness probe
+          livenessProbe:
             httpGet:
               path: /
               port: 8080
             initialDelaySeconds: 45
             periodSeconds: 15
-          resources:  # Added resource limits
+          resources:
             limits:
               memory: "512Mi"
               cpu: "500m"
